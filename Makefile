@@ -3,7 +3,6 @@
 #===============================================================================
 
 # Build-time arguments
-SPACK_VERSION ?= 0.14
 LLVM_VERSION  ?= 9.0.1
 
 # Spack variants
@@ -36,7 +35,6 @@ release: docker_build docker_push output
 docker_build:
 	# Build Docker image
 	docker build \
-                 --build-arg SPACK_VERSION=$(SPACK_VERSION) \
                  --build-arg LLVM_VERSION=$(LLVM_VERSION) \
                  --build-arg LLVM_OPTIONS=$(LLVM_OPTIONS) \
                  --build-arg BUILD_DATE=$(BUILD_DATE) \
