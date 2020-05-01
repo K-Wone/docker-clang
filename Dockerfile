@@ -1,11 +1,11 @@
-# stage 1: build LLVM with latest spack
+# Build LLVM with latest spack
 ARG GCC_VERSION="9.2.0"
-FROM leavesask/gcc:${GCC_VERSION} AS builder
+FROM leavesask/gcc:${GCC_VERSION}
+
+LABEL maintainer="Wang An <wangan.cs@gmail.com>"
 
 USER root
 
-ARG CMAKE_VERSION="3.16.5"
-ENV CMAKE_VERSION=${CMAKE_VERSION}
 ARG GCC_VERSION="9.2.0"
 ENV GCC_VERSION=${GCC_VERSION}
 ARG LLVM_VERSION="9.0.1"
@@ -14,30 +14,17 @@ ARG LLVM_OPTIONS=""
 ENV LLVM_OPTIONS=${LLVM_OPTIONS}
 
 # install LLVM
-RUN spack install --show-log-on-error -y llvm@${LLVM_VERSION} ^cmake@${CMAKE_VERSION} ${LLVM_OPTIONS}
-
-
-# stage 2: build the runtime environment
-ARG GCC_VERSION
-FROM leavesask/gcc:${GCC_VERSION}
-
-LABEL maintainer="Wang An <wangan.cs@gmail.com>"
-
-USER root
-
-ENV SPACK_ROOT=/opt/spack
-ENV PATH=${SPACK_ROOT}/bin:$PATH
-
-# copy artifacts from stage 1
-COPY --from=builder ${SPACK_ROOT} ${SPACK_ROOT}
-
-# initialize spack environment for all users
-ARG LLVM_VERSION="9.0.1"
 RUN set -eu; \
       \
-      source ${SPACK_ROOT}/share/spack/setup-env.sh; \
+      spack install --show-log-on-error -y llvm@${LLVM_VERSION} ${LLVM_OPTIONS}; \
       spack load llvm@${LLVM_VERSION}; \
       spack compiler add
+
+# initialize spack environment for all users
+ENV SPACK_ROOT=/opt/spack
+ENV PATH=${SPACK_ROOT}/bin:$PATH
+RUN source ${SPACK_ROOT}/share/spack/setup-env.sh
+
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE

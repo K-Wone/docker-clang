@@ -8,6 +8,7 @@
 # Supported tags
 
 - `9.0.1`
+- `7.1.0`
 - `5.0.2`
 
 # How to use
