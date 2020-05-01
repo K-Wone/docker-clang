@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  build_9_0_1:
+  build_9:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,16 +18,16 @@ jobs:
         BUILD_DATE: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
         VCS_URL: $(git config --get remote.origin.url)
         VCS_REF: $(git rev-parse --short HEAD)
-        LLVM_VERSION: 9.0.1
+        LLVM_VERSION: 9
       with:
         name: leavesask/llvm
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         buildargs: LLVM_VERSION,BUILD_DATE,VCS_URL,VCS_REF
         buildoptions: "--compress"
-        tags: "latest,9.0.1"
+        tags: "latest,9"
 
-  build_7_1_0:
+  build_8:
     runs-on: ubuntu-latest
 
     steps:
@@ -39,33 +39,32 @@ jobs:
         BUILD_DATE: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
         VCS_URL: $(git config --get remote.origin.url)
         VCS_REF: $(git rev-parse --short HEAD)
-        LLVM_VERSION: 7.1.0
-      with:
-        name: leavesask/llvm
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
-        buildargs: LLVM_VERSION,BUILD_DATE,VCS_URL,VCS_REF
-        buildoptions: "--compress"
-        tags: "7.1.0"
-
-  build_5_0_2:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@master
-
-    - name: Publish to Registry
-      uses: elgohr/Publish-Docker-Github-Action@master
-      env:
-        BUILD_DATE: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
-        VCS_URL: $(git config --get remote.origin.url)
-        VCS_REF: $(git rev-parse --short HEAD)
-        GCC_VERSION: 7.3.0
-        LLVM_VERSION: 5.0.2
+        LLVM_VERSION: 8
       with:
         name: leavesask/llvm
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         buildargs: GCC_VERSION,LLVM_VERSION,BUILD_DATE,VCS_URL,VCS_REF
         buildoptions: "--compress"
-        tags: "5.0.2"
+        tags: "8"
+
+  build_7:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Publish to Registry
+      uses: elgohr/Publish-Docker-Github-Action@master
+      env:
+        BUILD_DATE: $(date -u +"%Y-%m-%dT%H:%M:%SZ")
+        VCS_URL: $(git config --get remote.origin.url)
+        VCS_REF: $(git rev-parse --short HEAD)
+        LLVM_VERSION: 7
+      with:
+        name: leavesask/llvm
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        buildargs: LLVM_VERSION,BUILD_DATE,VCS_URL,VCS_REF
+        buildoptions: "--compress"
+        tags: "7"

@@ -3,7 +3,7 @@
 #===============================================================================
 
 # Build-time arguments
-LLVM_VERSION  ?= 9.0.1
+LLVM_VERSION  ?= 9
 
 # Spack variants
 LLVM_OPTIONS  ?= ""

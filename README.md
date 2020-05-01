@@ -7,9 +7,9 @@
 
 # Supported tags
 
-- `9.0.1`
-- `7.1.0`
-- `5.0.2`
+- `9`
+- `8`
+- `7`
 
 # How to use
 
@@ -27,20 +27,16 @@
 
 # How to build
 
-The base image is [spack/ubuntu-xenial](https://hub.docker.com/r/spack/ubuntu-xenial).
+The base image is [spack/ubuntu-bionic](https://hub.docker.com/r/spack/ubuntu-bionic).
 
 ## make
 
-There are a bunch of build-time arguments you can use to build the LLVM image.
-
-It is highly recommended that you build the image with `make`.
-
 ```bash
-# Build an image for LLVM 9.0.1
-make LLVM_VERSION="9.0.1"
+# Build an image for LLVM 9
+make LLVM_VERSION="9"
 
 # Build and publish the image
-make release LLVM_VERSION="9.0.1"
+make release LLVM_VERSION="9"
 ```
 
 Check `Makefile` for more options.
@@ -51,7 +47,7 @@ As an alternative, you can build the image with `docker build` command.
 
 ```bash
 docker build \
-        --build-arg LLVM_VERSION="9.0.1" \
+        --build-arg LLVM_VERSION="9" \
         --build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
         --build-arg VCS_REF=`git rev-parse --short HEAD` \
         -t my-repo/llvm:latest .
@@ -59,6 +55,4 @@ docker build \
 
 Arguments and their defaults are listed below.
 
-- `LLVM_VERSION`: The version of LLVM supported by spack (defaults to `9.0.1`)
-
-- `LLVM_OPTIONS`: Spack variants (defaults to none)
+- `LLVM_VERSION`: The version of LLVM supported by ubuntu-bionic (defaults to `9`)
