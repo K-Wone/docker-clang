@@ -4,6 +4,8 @@ FROM leavesask/gcc:${GCC_VERSION} AS builder
 
 USER root
 
+ARG CMAKE_VERSION="3.16.5"
+ENV CMAKE_VERSION=${CMAKE_VERSION}
 ARG GCC_VERSION="9.2.0"
 ENV GCC_VERSION=${GCC_VERSION}
 ARG LLVM_VERSION="9.0.1"
@@ -12,7 +14,7 @@ ARG LLVM_OPTIONS=""
 ENV LLVM_OPTIONS=${LLVM_OPTIONS}
 
 # install LLVM
-RUN spack install --show-log-on-error -y llvm@${LLVM_VERSION} ${LLVM_OPTIONS}
+RUN spack install --show-log-on-error -y llvm@${LLVM_VERSION} ^cmake@${CMAKE_VERSION} ${LLVM_OPTIONS}
 
 
 # stage 2: build the runtime environment
