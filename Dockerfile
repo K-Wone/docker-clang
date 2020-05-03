@@ -33,6 +33,16 @@ ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu/:${LD_LIBRARY_PATH}"
 # expose the compiler to spack
 RUN spack compiler add
 
+# setup development environment
+ENV ENV_FILE="/root/setup-env.sh"
+RUN set -e; \
+      \
+      echo "#!/bin/bash" > $ENV_FILE; \
+      echo "source /opt/spack/share/spack/setup-env.sh" >> $ENV_FILE
+
+ENTRYPOINT []
+CMD ["/bin/bash"]
+
 
 # Build-time metadata as defined at http://label-schema.org
 ARG BUILD_DATE
@@ -45,7 +55,3 @@ LABEL org.label-schema.build-date=${BUILD_DATE} \
       org.label-schema.vcs-ref=${VCS_REF} \
       org.label-schema.vcs-url=${VCS_URL} \
       org.label-schema.schema-version="1.0"
-
-# setup entrypoint
-ENTRYPOINT ["/bin/bash"]
-CMD [""]
