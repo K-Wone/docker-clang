@@ -3,9 +3,10 @@
 #===============================================================================
 
 # Build-time arguments
-LLVM_VERSION  ?= 9
+LLVM_VERSION  ?= 9.0.1
 
 # Spack variants
+EXTRA_SPECS   ?= "target=skylake"
 LLVM_OPTIONS  ?= ""
 
 # Image name
@@ -37,6 +38,7 @@ docker_build:
 	docker build \
                  --build-arg LLVM_VERSION=$(LLVM_VERSION) \
                  --build-arg LLVM_OPTIONS=$(LLVM_OPTIONS) \
+                 --build-arg EXTRA_SPECS=$(EXTRA_SPECS) \
                  --build-arg BUILD_DATE=$(BUILD_DATE) \
                  --build-arg VCS_URL=$(VCS_URL) \
                  --build-arg VCS_REF=$(GIT_COMMIT) \

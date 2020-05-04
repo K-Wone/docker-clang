@@ -7,39 +7,31 @@ LABEL maintainer="Wang An <wangan.cs@gmail.com>"
 
 USER root
 
-ARG LLVM_VERSION="9"
+ARG EXTRA_SPECS="target=skylake"
+ENV EXTRA_SPECS=${EXTRA_SPECS}
+ARG LLVM_VERSION="9.0.1"
 ENV LLVM_VERSION=${LLVM_VERSION}
 
 # install LLVM
 RUN set -eu; \
       \
-      apt-get update; \
-      apt-get install -y \
-              clang-${LLVM_VERSION} \
-              libc++-${LLVM_VERSION}-dev \
-              libc++abi-${LLVM_VERSION}-dev
-
-# create symbolic links
-RUN set -eu; \
+      # find existing compilers
+      spack compiler add; \
       \
-      rm -f /usr/bin/clang /usr/bin/clang++; \
-      ln -s /usr/bin/clang-${LLVM_VERSION} /usr/bin/clang; \
-      ln -s /usr/bin/clang++-${LLVM_VERSION} /usr/bin/clang++
-
-# set environment variables
-ENV LIBRARY_PATH="/usr/lib/x86_64-linux-gnu/:${LIBRARY_PATH}"
-ENV LD_LIBRARY_PATH="/usr/lib/x86_64-linux-gnu/:${LD_LIBRARY_PATH}"
-
-# expose the compiler to spack
-RUN spack compiler add
+      spack install llvm@$LLVM_VERSION $EXTRA_SPECS; \
+      spack clean -a; \
+      spack load llvm@$LLVM_VERSION; \
+      spack compiler add
 
 # setup development environment
 ENV ENV_FILE="/root/setup-env.sh"
 RUN set -e; \
       \
-      echo "#!/bin/bash" > $ENV_FILE; \
-      echo "source /opt/spack/share/spack/setup-env.sh" >> $ENV_FILE
+      echo "#!/bin/env bash" > $ENV_FILE; \
+      echo "source /opt/spack/share/spack/setup-env.sh" >> $ENV_FILE; \
+      echo "spack load llvm@$LLVM_VERSION" >> $ENV_FILE
 
+# reset the entrypoint
 ENTRYPOINT []
 CMD ["/bin/bash"]
 
